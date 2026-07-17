@@ -5,3 +5,6 @@ packages:
 onlyBuiltDependencies:
   - esbuild
   - lightningcss
+  - prisma
+  - "@prisma/engines"
+  - "@prisma/client"

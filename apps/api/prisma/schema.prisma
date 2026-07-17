@@ -1,0 +1,75 @@
+// Flavorium — Prisma schema
+// Derived from ERD.md. See root FEATURES.md for the decisions behind this model.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// A coffee's stable identity. Buying/refilling the same bean adds a new Bag.
+model Bean {
+  id         Int      @id @default(autoincrement())
+  // Forward-compat for multi-user: every row is "owned" by a user.
+  // Auth + a real User model come later; for now this defaults to 1.
+  userId     Int      @default(1)
+  name       String
+  origin     String
+  roastery   String
+  process    String // Washed | Natural | Honey | ...
+  roastLevel String // Light | Medium | Dark
+  notes      String?
+  favorite   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  bags  Bag[]
+  brews Brew[]
+
+  @@index([userId])
+}
+
+// A physical bag you bought. Roast date lives here (per roast batch), not on Bean.
+// Inventory is a ledger: remaining = SUM(bag.amountGrams) - SUM(brew.coffeeDose).
+model Bag {
+  id           Int      @id @default(autoincrement())
+  beanId       Int
+  roastDate    DateTime
+  amountGrams  Int // initial weight of this bag
+  purchaseDate DateTime
+  createdAt    DateTime @default(now())
+
+  bean Bean @relation(fields: [beanId], references: [id], onDelete: Cascade)
+
+  @@index([beanId])
+}
+
+// A single brewing session. Belongs to a bean; consumes stock (aggregate, not per-bag).
+model Brew {
+  id           Int      @id @default(autoincrement())
+  beanId       Int
+  method       String // V60 | AeroPress | Espresso | ...
+  grinder      String?
+  grindSetting String?
+  coffeeDose   Float // grams — also what decrements inventory
+  waterAmount  Float // grams / ml — brew ratio is computed (water / dose), never stored
+  waterTemp    Int?
+  brewTimeSec  Int?
+  rating       Int // overall 1-5
+
+  // Structured tasting attributes (1-5)
+  acidity    Int
+  sweetness  Int
+  bitterness Int
+  body       Int
+  aftertaste Int
+
+  notes    String?
+  brewedAt DateTime @default(now())
+
+  bean Bean @relation(fields: [beanId], references: [id], onDelete: Cascade)
+
+  @@index([beanId])
+}

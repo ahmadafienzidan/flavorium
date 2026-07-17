@@ -6,6 +6,16 @@
   "scripts": {
     "dev": "echo \"TODO: Apollo Server dev server\" && exit 0",
     "build": "echo \"TODO: build\" && exit 0",
-    "test": "echo \"TODO: tests\" && exit 0"
+    "test": "echo \"TODO: tests\" && exit 0",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "db:reset": "prisma migrate reset"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3"
   }
 }
