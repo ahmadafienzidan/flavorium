@@ -1,0 +1,11 @@
+{
+  "name": "@flavorium/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"TODO: Apollo Server dev server\" && exit 0",
+    "build": "echo \"TODO: build\" && exit 0",
+    "test": "echo \"TODO: tests\" && exit 0"
+  }
+}

@@ -1,0 +1,27 @@
+# dependencies
+node_modules
+
+# build output
+dist
+dist-ssr
+build
+.output
+.nitro
+.tanstack
+.vinxi
+.wrangler
+
+# env & secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# os / editor
+.DS_Store
+Thumbs.db
+
+# misc
+__unconfig*
+todos.json
+*.log
